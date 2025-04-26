@@ -1,0 +1,14 @@
+adminPassword: prom-operator
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources: []
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 150m
+    memory: 256Mi
