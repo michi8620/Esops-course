@@ -31,6 +31,19 @@ https://docs.google.com/presentation/d/14lZw6EWNdbgEsl14Lg7Vtc6gwGIbPTeOR_QTC_Su
      │     Loki     │<─────┤   Tempo (Traces)│
      └──────────────┘      └─────────────────┘
 
-Course explanation:
-each team deploys one service.
-each team contains 2-3 members.
+## Course explanation:
+
+Each team deploys one service.
+In order for each team to get started immediately, each team must deploy their technology along with the ready-made demo app (and other tools if needed).
+
+## team divison: 
+
+otel-collector - Michal
+prometheus - Talya and Tamar
+kube-state-metrics - yael
+loki -Netta
+tempo - Shahar
+grafana - Roi
+blackbox exporter - Amir
+
+
