@@ -1,0 +1,19 @@
+{
+    "name": "basic-demo-app",
+    "version": "1.0.0",
+    "description": "Basic app for OpenTelemetry instrumentation learning",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    },
+    "dependencies": {
+        "axios": "^1.6.2",
+        "express": "^4.21.2",
+        "pino": "^8.16.2",
+        "pino-pretty": "^10.2.3"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1"
+    }
+}
