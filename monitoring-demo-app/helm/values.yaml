@@ -2,8 +2,8 @@
 replicaCount: 1
 
 image:
-  repository: observability-app
-  tag: latest
+  repository: michal8620/observability-demo-app
+  tag: v0.2
   pullPolicy: IfNotPresent
 
 nameOverride: ""
