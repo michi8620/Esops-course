@@ -38,12 +38,12 @@ In order for each team to get started immediately, each team must deploy their t
 
 ## team divison: 
 
-otel-collector - Michal
-prometheus - Talya and Tamar
-kube-state-metrics - yael
-loki -Netta
-tempo - Shahar
-grafana - Roi
-blackbox exporter - Amir
+- otel-collector - Talya and Tamar
+- prometheus -> victoria metrics - Michal
+- kube-state-metrics - yael
+- loki - Netta
+- tempo - Shahar
+- grafana - Roi
+- blackbox exporter - Amir
 
 

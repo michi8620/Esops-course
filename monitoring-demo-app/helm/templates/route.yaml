@@ -1,0 +1,19 @@
+{{- if .Values.route.enabled -}}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "observability-app.fullname" . }}
+  labels:
+    {{- include "observability-app.labels" . | nindent 4 }}
+spec:
+  path: {{ .Values.route.path }}
+  to:
+    kind: Service
+    name: {{ include "observability-app.fullname" . }}
+    weight: 100
+  port:
+    targetPort: {{ .Values.route.targetPort }}
+  {{- if .Values.route.host }}
+  host: {{ .Values.route.host }}
+  {{- end }}
+{{- end }}
