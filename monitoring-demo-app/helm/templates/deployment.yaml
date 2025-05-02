@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "observability-app.fullname" . }}
+  name: {{ include "monitoring-app.fullname" . }}
   labels:
-    {{- include "observability-app.labels" . | nindent 4 }}
+    {{- include "monitoring-app.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "observability-app.selectorLabels" . | nindent 6 }}
+      {{- include "monitoring-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "observability-app.selectorLabels" . | nindent 8 }}
+        {{- include "monitoring-app.selectorLabels" . | nindent 8 }}
       annotations:
         # These annotations will help students discover monitoring possibilities
         # but don't actually configure anything (they'll need to set up the monitoring)

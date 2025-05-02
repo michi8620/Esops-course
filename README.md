@@ -31,11 +31,6 @@ https://docs.google.com/presentation/d/14lZw6EWNdbgEsl14Lg7Vtc6gwGIbPTeOR_QTC_Su
      │     Loki     │<─────┤   Tempo (Traces)│
      └──────────────┘      └─────────────────┘
 
-## Course explanation:
-
-Each team deploys one service.
-In order for each team to get started immediately, each team must deploy their technology along with the ready-made demo app (and other tools if needed).
-
 ## team divison: 
 
 - otel-collector - Talya and Tamar
@@ -46,4 +41,24 @@ In order for each team to get started immediately, each team must deploy their t
 - grafana - Roi
 - blackbox exporter - Amir
 
+---
+
+# Your assignment
+
+### Some Background (DO NOT SKIP!)
+
+In this repo, there is a monitoring-demo-app. This application demonstrates a basic python application that sends metrics, logs and traces.
+
+It uses flask for API and contains endpoints to help demonstrate a real application's data.
+Go ahead and read its README, and if your curious check its code :)
+
+The app includes everything you need to deploy it to openshift (a helm chart including of deployment, service and route).
+The app **does not** include instrumentation at all, **you** will need to instrument it using the tools your technology uses (don't worry, we will tell you what to use).
+
+After deploying, click on the route's link to see the app's UI.
+
+From this point, you are ready to start your main mission (YAY :D)
+Go to your folder's README that in this repo and start from there.
+
+**Notice**: openshift's sandbox can sometimes delete your pods, as it is a free version and we are broke.
 

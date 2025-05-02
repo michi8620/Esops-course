@@ -7,7 +7,7 @@ A simple application designed for learning various observability technologies in
 This is a simple Flask application that:
 
 1. **Generates activity without any built-in monitoring instrumentation:**
-   - Standard application logs (not using OpenTelemetry)
+   - Standard application logs
    - HTTP endpoints with varying performance characteristics
    - CPU-intensive operations
    - Error conditions
@@ -39,20 +39,24 @@ This application is designed to be monitored using:
 
 To deploy this application in OpenShift's sandbox:
 
-1. Build the Docker image:
+**If you never created a registry in docker hub, do it now:
+https://hub.docker.com/**
+
+1. Build the Docker image (your first tag should be v0.1.0):
    ```bash
-   docker build -t observability-app:latest .
+   docker build -t <registry>/observability-app:<tag> .
    ```
 
 2. Push to your container registry:
    ```bash
-   docker tag observability-app:latest <registry>/observability-app:latest
-   docker push <registry>/observability-app:latest
+   docker push <registry>/observability-app:<tag>
    ```
 
 3. Deploy using the Helm chart:
    ```bash
-   helm install obs-app ./helm --set image.repository=<registry>/observability-app
+   helm install monitoring-app ./helm \
+      --set image.repository=<registry>/monitoring-app \
+      --set image.tag=<tag>
    ```
 
 ## Learning Opportunities
@@ -86,7 +90,7 @@ With this application, you can learn how to:
 ## Project Structure
 
 ```
-observability-app/
+monitoring-demo-app/
 ├── main.py                  # Main application code
 ├── templates/               # HTML templates for UI
 │   └── index.html

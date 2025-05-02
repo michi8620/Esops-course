@@ -1,28 +1,36 @@
 mode: deployment
 
+image:
+  repository: otel/opentelemetry-collector-contrib
+  tag: latest
+  pullPolicy: IfNotPresent
+
 config:
   exporters:
-    logging:
-      loglevel: debug
+    debug:
+      verbosity: detailed
+      sampling_initial: 5
+      sampling_thereafter: 200
+
   service:
     pipelines:
       logs:
         receivers: [otlp]
         processors: []
-        exporters: [logging]
+        exporters: [debug]
       metrics:
         receivers: [otlp]
         processors: []
-        exporters: [logging]
+        exporters: [debug]
       traces:
         receivers: [otlp]
         processors: []
-        exporters: [logging]
+        exporters: [debug]
 
 resources:
   limits:
-    cpu: 500m
+    cpu: 250m
     memory: 512Mi
   requests:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 100m
+    memory: 128Mi

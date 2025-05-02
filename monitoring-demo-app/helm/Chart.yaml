@@ -1,5 +1,5 @@
 apiVersion: v2
-name: observability-app
+name: monitoring-app
 description: A simple application for learning observability tools
 type: application
 version: 0.1.0

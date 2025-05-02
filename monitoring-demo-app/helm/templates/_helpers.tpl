@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "observability-app.name" -}}
+{{- define "monitoring-app.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -9,7 +9,7 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
-{{- define "observability-app.fullname" -}}
+{{- define "monitoring-app.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -21,16 +21,16 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "observability-app.chart" -}}
+{{- define "monitoring-app.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "observability-app.labels" -}}
-helm.sh/chart: {{ include "observability-app.chart" . }}
-{{ include "observability-app.selectorLabels" . }}
+{{- define "monitoring-app.labels" -}}
+helm.sh/chart: {{ include "monitoring-app.chart" . }}
+{{ include "monitoring-app.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -40,7 +40,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "observability-app.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "observability-app.name" . }}
+{{- define "monitoring-app.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "monitoring-app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
