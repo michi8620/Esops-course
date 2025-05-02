@@ -107,6 +107,12 @@ all the data that is sent to the collector. If you see the data flowing that mea
 ### Congratulations on finishing this task! 
 #### This is a great start for your SRE and DevOps journey, keep going!
 
+---
+
+## Bonus: Route
+
+- Create Route for the collector so other apps could send data to it.
+
 Copyright © 2025 Barista.
 
 
