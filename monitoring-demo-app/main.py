@@ -15,7 +15,7 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
-logger = logging.getLogger('observability-app')
+logger = logging.getLogger('monitoring-app')
 
 # List of fictional users for logs
 USERS = ["alice", "bob", "charlie", "dave", "eve", "frank", "grace", "heidi"]

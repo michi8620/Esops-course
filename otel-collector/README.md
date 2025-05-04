@@ -1,4 +1,4 @@
-# Instructions for Opentelemetry Collector team
+# Instructions for Opentelemetry Collector Setup
 
 ## OpenTelemetry: Beginner Starter Questions
 
@@ -103,15 +103,18 @@ all the data that is sent to the collector. If you see the data flowing that mea
 - There are errors or warnings in the demo-app logs.
 
 ---
+## Bonus: Route
 
-### Congratulations on finishing this task! 
-#### This is a great start for your SRE and DevOps journey, keep going!
+- Create a Route  for the collector so other apps could send data to it.
+https://docs.redhat.com/en/documentation/openshift_container_platform/4.11/html/networking/configuring-routes#nw-creating-a-route_route-configuration
 
 ---
 
-## Bonus: Route
+### Congratulations on finishing this task! 
+#### This is a great start for your SRE and DevOps journey, now go to the prometheus folder's README to continue.
 
-- Create Route for the collector so other apps could send data to it.
+---
+
 
 Copyright © 2025 Barista.
 
