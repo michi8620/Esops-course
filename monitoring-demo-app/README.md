@@ -44,12 +44,12 @@ https://hub.docker.com/**
 
 1. Build the Docker image (your first tag should be v0.1.0):
    ```bash
-   docker build -t <registry>/observability-app:<tag> .
+   docker build -t <registry>/monitoring-app:<tag> .
    ```
 
 2. Push to your container registry:
    ```bash
-   docker push <registry>/observability-app:<tag>
+   docker push <registry>/monitoring-app:<tag>
    ```
 
 3. Deploy using the Helm chart:

@@ -17,54 +17,149 @@ Before you start installing or working with Prometheus, it's important to unders
 
 ## Step 1: Deploying Prometheus
 
-- add this helm chart to your local helm repo: https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-collector
-- pull the chart to your desired folder and untar it.
-- create an additional values file and call it "values-openshift-sandbox.yaml". DO NOT CHANGE DEFAULT VALUES FILE.
-- Copy and paste the configuration from values.yaml here to values-openshift-sandbox.yaml.
-This is your starting point, we:
-1. Provided the image you will use which is opentelemetry-collector-contrib, read about how 
-it is different from the ordinary opentelemetry collector image.
-2. Configured the resources for the collector, read on the difference between "limits" and "requests".
-3. Gave you the basic configuration for pipelines in the collector. If you don't understand something in it,
-ask google. 
+Compared to the last exercise, now we **have** to make a Route file, so we could access the UI of prometheus.
 
-Some **important** points for the learning process:
-- When installing the helm chart, override the default values using --values:
+Let's do it!
+
+1. Add this helm chart to your local helm repo: https://artifacthub.io/packages/helm/prometheus-community/prometheus
+2. Pull the chart to your desired folder and untar it.
+3. Create an additional values file and call it "values-openshift-sandbox.yaml". DO NOT CHANGE DEFAULT VALUES FILE. 
+4. Copy and paste the configuration from values.yaml here to values-openshift-sandbox.yaml.
+5. Try deploying it to openshift and based on the errors you encounter modify values-openshift-sandbox.yaml
+
+Only after you succeeded deploying prometheus, continue to the next instructions.
+
+6. Add a route.yaml file in templates with the right configuration. make sure it is pointing on the right Service.
+7. Add its values in the values-openshift-sandbox.yaml file.
+8. Try deploying it to openshift using the command you already know (look in the previous assignment).
+
+### Oh no, that didn't work. Why?
+
+In helm charts we have something called **'values.schema.json'**. go inside values.schema.json in your prometheus chart.
+You'll see that the creators of this helm chart specified specifically what objects should be in the chart.
+And guess what, route is not one of them :( So we can't actually just add whatever we want. 
+
+We have two options:
+1. modify values.schema.json to suit our needs and enable creating a route object.
+2. create a **wrapper** chart that will act as the parent of the prometheus chart. It will be a chart inside a chart.
+The child chart is called a subchart. 
+
+#### We will use the second option, so you would learn a little bit about dependencies ;)
+(And also, it is not recommended to change a chart's scheme,
+as we want our work to be understandable for our coworkers and not change already built charts )
+
+
+### Creating a wrapper chart
+
+1. Create a folder named 'prometheus-wrapper' 
+2. inside this folder, create:
+- 'charts' folder
+- 'templates' folder
+- Chart.yaml file
+- values.yaml file
+3. In your charts folder, copy paste the prometheus chart you pulled earlier. 
+4. Copy and delete values-openshift-sandbox.yaml, paste its content to the values.yaml you created under a 'prometheus' block. like this:
+
 ```
-helm install <release_name> ./path/to/chart --values <values_override>.yaml -n <namespace>
+prometheus:
+    server:
+      resources:
+        limits:
+          cpu: 500m
+          memory: 1Gi
+        requests:
+          cpu: 250m
+          memory: 512Mi
+## and so on...
+
+## hint: define here the route configuration.
 ```
-This flag will make sure that the default configuration will not change unless you override it
-with new values. 
 
-The reason we create a seperate values file is to easily see how our teammates changed
-the default configuration, and to make different values files for different environments (openshift, AWS, Azure...)
-as they require different configurations.
-
-
-- **DO NOT HARDCODE!** helm charts are built to be as generic and modular as possible. 
-The only thing you will change is your custom values.yaml. helm will do the work and inject it in the deployment
-files, you can check how by entering the files in 'templates'.
-- **Don't create a route this time.** The app-demo should be in the same namespace as the collector so
-the app will send data to the Service instead using NodePort as the type.
-In real life you **will** need to create a route for the collector, so apps from other namespaces could 
-send data to you, but for learning purposes and because of issues with using gRPC protocol with routes we will skip it.
+5. Copy and delete the route.yaml you created earlier, create route.yaml in the 'templates' folder and paste its content.
+6. In your route.yaml you probably have something like '{{ include "prometheus.server.fullname" . }}' (If you did it the right way without hardcoding).
+when executing this line, helm uses a file called **_helpers.tpl**. 
 
 ---
 
-## Step 2: Instrumenting the App
+#### _helpers.tpl:
 
-- Instrument using ZERO-CODE based instrumentation. chatgpt will tell you to change the code inside main.py, as Joe
-Biden said: DON'T. find the right documentation and don't give in to AI. You DON'T need to change the python code.
-- Install the necessary libraries inside the **Dockerfile**, don't write them in requirements.txt
-- Define environment variables inside a **ConfigMap** and mount them into deployment.yaml
-(https://kubernetes.io/docs/concepts/configuration/configmap/), don't add them in the Dockerfile.
-**ConfigMap should be generic and take its variables from the values file.**
-- Send data using gRPC protocol.
-- Make sure to disable tls.
+In Helm charts, _helpers.tpl is a template file typically used to define reusable template snippets—like labels, names, and annotations—that can be shared across other chart templates.
+
+It usually contains Go template functions using define and template, helping keep the code DRY (Don't Repeat Yourself). For example:
+
+```
+{{- define "mychart.fullname" -}}
+{{ printf "%s-%s" .Release.Name .Chart.Name }}
+{{- end }}
+```
+
+You can then reuse it in other templates like this:
+
+```
+metadata:
+  name: {{ include "mychart.fullname" . }}
+```
 
 ---
 
-## Step 3: Succeeded or Failed?
+Now that you understand why helm charts have _helpers.tpl, and you even went inside the one that in the
+prometheus chart because you are a very curious person, **let's go back to the instructions**:
+
+7. Because we are using a chart inside a chart, and we are only adding one file (route.yaml),
+we don't necessarily need to create _helpers.tpl. Instead, write it inside values.yaml (for example,
+the name of the service that the route points to which is usually pulled from _helpers.tpl)
+8. Add the following to the Chart.yaml file:
+
+```
+apiVersion: v2
+name: prometheus-wrapper
+description: A wrapper chart around prometheus
+type: application
+version: 0.1.0
+appVersion: "1.0"
+
+dependencies:
+  - name: prometheus
+    version: "27.12.0"
+    repository: "https://prometheus-community.github.io/helm-charts"
+```
+The documentation source: https://helm.sh/docs/helm/helm_dependency/
+We also use this strategy when creating an **umbrella chart** (many charts under one chart).
+Even prometheus uses it, and that's why we disabled all the subcharts in the values we gave you in the start.
+
+#### So what should you have?
+
+1. charts folder that contains the prometheus chart
+2. templates folder that contains only route.yaml
+3. Chart.yaml file that defines chart configuration and contains its dependencies.
+4. values.yaml that contains values for the prometheus chart inside a 'prometheus' block,
+and values for your wrapper chart (route values).
+
+#### Try deploying!
+
+##### Success:
+everything runs smoothly, you can access prometheus UI by clicking on the route. AMAZING!
+
+## Step 3: Configure prometheus exporter inside the collector
+
+1. using your existing otel-collector helm chart, try to add the needed configuration for the collector
+to expose a /metrics endpoint using prometheus exporter.
+It should be two lines!!
+
+Wait, why /metrics? what do you mean?
+ask chatgpt, I didn't find a good source :\
+
+2. To actually expose a /metrics endpoint, you will need to expose a port of your choice in your Service.yaml.
+Add this port inside the values-openshift-sandbox.yaml Service ports configuration and name it 'metrics'.
+   (A hint to understand it better: you have two main ports that are opened: otlp and otlp-http. just add one more)
+
+3. After making the changes, upgrade your otel-collector and check that the port is exposed.
+
+If everything works (and even if not), you are doing amazing! keep learning!
+
+---
+
+## Step 3: Configure Prometheus to Scrape the Collector
 
 ### Success: 
 

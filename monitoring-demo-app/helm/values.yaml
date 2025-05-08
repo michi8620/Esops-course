@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: <change_this>/monitoring-demo-app
+  repository: <change_this>/monitoring-app
   tag: <change_this>
   pullPolicy: IfNotPresent
 
