@@ -15,6 +15,19 @@ Before you start installing or working with Prometheus, it's important to unders
 
 ---
 
+# What are we doing?
+
+After we managed to send telemetry data from our app to the collector, we now need to seperate this data to
+the three data sources: prometheus/victoriaMetrics, loki and tempo.
+
+In this assignment, you will first deploy prometheus, configure opentelemetry to expose its metrics and configure 
+prometheus to scrape those metrics.
+
+Then, you will change the data source to victoria metrics and make similar steps.
+
+So let's start by deploying prometheus, good luck!
+
+
 ## Step 1: Deploying Prometheus
 
 Compared to the last exercise, now we **have** to make a Route file, so we could access the UI of prometheus.
@@ -151,7 +164,7 @@ ask chatgpt, I didn't find a good source :\
 
 2. To actually expose a /metrics endpoint, you will need to expose a port of your choice in your Service.yaml.
 Add this port inside the values-openshift-sandbox.yaml Service ports configuration and name it 'metrics'.
-   (A hint to understand it better: you have two main ports that are opened: otlp and otlp-http. just add one more)
+   (A hint to understand it better: you have two main ports that are exposed: otlp and otlp-http. just add one more)
 
 3. After making the changes, upgrade your otel-collector and check that the port is exposed.
 
@@ -161,26 +174,27 @@ If everything works (and even if not), you are doing amazing! keep learning!
 
 ## Step 3: Configure Prometheus to Scrape the Collector
 
+After you've got a successfully deployed prometheus, let's ruin it😈
+
+In this step, all you need to do is add a target to scrape.
+Since this step is short, I will not direct you this time. 
+Try asking google, chatgpt, claude, and I'm sure you will make it :)
+
 ### Success: 
 
-Check inside the collector's pod's logs. The debug configuration in the collector we gave you in the start should print
-all the data that is sent to the collector. If you see the data flowing that means that you succeeded! :D
+Access prometheus UI, in the menu there is 'status' and then 'target health'. check that prometheus successfully
+scrapes your collector.
 
-### Failure:
-
-- There is only startup logs in the collector's pod.
-- There are errors or warnings in the demo-app logs.
-
----
-## Bonus: Route
-
-- Create a Route  for the collector so other apps could send data to it.
-https://docs.redhat.com/en/documentation/openshift_container_platform/4.11/html/networking/configuring-routes#nw-creating-a-route_route-configuration
+if it is, go back to the homepage and check if you can query the metrics.
 
 ---
 
-### Congratulations on finishing this task! 
-#### This is a great start for your SRE and DevOps journey, now go to the prometheus folder's README to continue.
+# Victoria Metrics
+
+coming soon
+
+### Well done!
+#### go to the loki folder's README to continue.
 
 ---
 
