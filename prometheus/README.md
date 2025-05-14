@@ -153,7 +153,7 @@ and values for your wrapper chart (route values).
 ##### Success:
 everything runs smoothly, you can access prometheus UI by clicking on the route. AMAZING!
 
-## Step 3: Configure prometheus exporter inside the collector
+## Step 2: Configure prometheus exporter inside the collector
 
 1. using your existing otel-collector helm chart, try to add the needed configuration for the collector
 to expose a /metrics endpoint using prometheus exporter.
@@ -191,7 +191,18 @@ if it is, go back to the homepage and check if you can query the metrics.
 
 # Victoria Metrics
 
-coming soon
+Victoria Metrics is almost identical to prometheus.
+If you are curious, read about all their products in the documentation: https://docs.victoriametrics.com/victoriametrics/
+
+The product we will use, is victoria metrics single. 
+
+- Pull the helm chart, untar it and this time don't make a wrapper chart, since victoria metrics doesn't have a scheme configured.
+
+- add a route file to templates, add a values file named values-openshift-sandbox.yaml
+
+- Add the nessecary values for victoria metrics to scrape the otel-collector.
+
+You wouldn't any more guidance, it is almost the same as prometheus, you got this!
 
 ### Well done!
 #### go to the loki folder's README to continue.
